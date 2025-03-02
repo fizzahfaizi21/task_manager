@@ -10,7 +10,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Task Manager',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
+        scaffoldBackgroundColor:
+            Color.fromARGB(255, 236, 199, 252), // Very light purple background
       ),
       home: TaskListScreen(),
     );
@@ -71,7 +73,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task Manager'),
+        title: Text(
+          'Task Manager',
+          style: TextStyle(
+              color: Colors.white), // White text for better visibility
+        ),
+        backgroundColor: Colors.purple, // Purple background for app bar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,6 +92,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     controller: _taskController,
                     decoration: InputDecoration(
                       hintText: 'Enter task name',
+                      hintStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(),
                     ),
                     onSubmitted: (_) => _addTask(),
@@ -94,6 +102,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 ElevatedButton(
                   onPressed: _addTask,
                   child: Text('Add'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.purple, // Match button color with theme
+                    foregroundColor: Colors.white, // White text on button
+                  ),
                 ),
               ],
             ),
@@ -101,7 +114,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
             // Task list with full functionality
             Expanded(
               child: _tasks.isEmpty
-                  ? Center(child: Text('No tasks yet. Add some!'))
+                  ? Center(child: Text('No tasks yet. Add some above!'))
                   : ListView.builder(
                       itemCount: _tasks.length,
                       itemBuilder: (context, index) {
@@ -115,7 +128,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                     ? TextDecoration.lineThrough
                                     : null,
                                 color: _tasks[index].isCompleted
-                                    ? Colors.grey
+                                    ? Colors.black
                                     : Colors.black,
                               ),
                             ),
@@ -124,6 +137,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                               onChanged: (bool? value) {
                                 _toggleTaskCompletion(index);
                               },
+                              activeColor:
+                                  Colors.purple, // Purple checkbox when checked
                             ),
                             trailing: IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
