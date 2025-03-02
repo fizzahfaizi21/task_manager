@@ -87,6 +87,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       hintText: 'Enter task name',
                       border: OutlineInputBorder(),
                     ),
+                    onSubmitted: (_) => _addTask(),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -97,28 +98,43 @@ class _TaskListScreenState extends State<TaskListScreen> {
               ],
             ),
             SizedBox(height: 20),
-            // Placeholder for the task list - will be updated in the next step
+            // Task list with full functionality
             Expanded(
-              child: ListView.builder(
-                itemCount: _tasks.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('Placeholder task'),
-                    leading: Checkbox(
-                      value: false,
-                      onChanged: (bool? value) {
-                        // Completion functionality will be added in the next step
+              child: _tasks.isEmpty
+                  ? Center(child: Text('No tasks yet. Add some!'))
+                  : ListView.builder(
+                      itemCount: _tasks.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          child: ListTile(
+                            title: Text(
+                              _tasks[index].name,
+                              style: TextStyle(
+                                decoration: _tasks[index].isCompleted
+                                    ? TextDecoration.lineThrough
+                                    : null,
+                                color: _tasks[index].isCompleted
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
+                            leading: Checkbox(
+                              value: _tasks[index].isCompleted,
+                              onChanged: (bool? value) {
+                                _toggleTaskCompletion(index);
+                              },
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                _deleteTask(index);
+                              },
+                            ),
+                          ),
+                        );
                       },
                     ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        // Delete functionality will be added in the next step
-                      },
-                    ),
-                  );
-                },
-              ),
             ),
           ],
         ),
