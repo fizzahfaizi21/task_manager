@@ -17,6 +17,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Task model class
+class Task {
+  String name;
+  bool isCompleted;
+
+  Task({required this.name, this.isCompleted = false});
+}
+
 class TaskListScreen extends StatefulWidget {
   @override
   _TaskListScreenState createState() => _TaskListScreenState();
@@ -25,6 +33,33 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   // Controller for the text input field
   final TextEditingController _taskController = TextEditingController();
+
+  // List to store tasks
+  List<Task> _tasks = [];
+
+  // Method to add a task
+  void _addTask() {
+    if (_taskController.text.isNotEmpty) {
+      setState(() {
+        _tasks.add(Task(name: _taskController.text));
+        _taskController.clear();
+      });
+    }
+  }
+
+  // Method to toggle task completion
+  void _toggleTaskCompletion(int index) {
+    setState(() {
+      _tasks[index].isCompleted = !_tasks[index].isCompleted;
+    });
+  }
+
+  // Method to delete a task
+  void _deleteTask(int index) {
+    setState(() {
+      _tasks.removeAt(index);
+    });
+  }
 
   @override
   void dispose() {
@@ -56,32 +91,29 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 ),
                 SizedBox(width: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // Add task functionality will be added later
-                  },
+                  onPressed: _addTask,
                   child: Text('Add'),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            // Placeholder for the task list
+            // Placeholder for the task list - will be updated in the next step
             Expanded(
               child: ListView.builder(
-                itemCount: 0, // No tasks yet
+                itemCount: _tasks.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    // Task display will be implemented later
                     title: Text('Placeholder task'),
                     leading: Checkbox(
                       value: false,
                       onChanged: (bool? value) {
-                        // Completion functionality will be added later
+                        // Completion functionality will be added in the next step
                       },
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        // Delete functionality will be added later
+                        // Delete functionality will be added in the next step
                       },
                     ),
                   );
